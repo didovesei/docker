@@ -1,0 +1,45 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: builder
+  entrypoint: bash
+  args:
+  - -exc
+  - |
+    DOCKER_BUILDKIT=1 docker build --progress=plain -f Dockerfile -t gcr.io/baremetal-yfd/gcb-built:a1 .
+    docker push gcr.io/baremetal-yfd/gcb-built:a1
+#- name: 'gcr.io/cloud-builders/docker'
+#  id: builder
+#  entrypoint: bash
+#  args:
+#  - -exc
+#  - |
+#    pwd
+#    docker build -f Dockerfile.builder -t builder:local .
+#- name: 'builder:local'
+#  id: build
+#  entrypoint: bash
+#  args:
+#  - -exc
+#  - |
+#    touch a
+#    chcon system_u:object_r:container_file_t:s0 a
+#    ls -lZ a
+#    ls -lZ /workspace/a
+#    chmod 777 a
+#    pwd
+#    tar --acls --selinux --xattrs --xattrs-include="*" -p -cf m.tar a
+#    tar -tf m.tar
+#- name: 'gcr.io/cloud-builders/docker'
+#  id: test-1
+#  entrypoint: bash
+#  args:
+#  - -exc
+#  - |
+#    #cat /proc/fs/ext4/sda1/options | grep xattr
+#    #docker buildx create --name local-1 --platform=linux/amd64 --buildkitd-flags '--allow-insecure-entitlement security.insecure' --use
+#    #docker buildx use local-1
+#    #docker buildx build --builder=local-1 --platform=linux/amd64 --allow=security.insecure --progress=plain -f Dockerfile.chcon --load -t myimage:local .
+#    DOCKER_BUILDKIT=1 docker build --platform=linux/amd64 --progress=plain -f Dockerfile -t myimage:local .
+#    docker run myimage:local ls -lZ /usr/bin/a
+#    docker tag myimage:local gcr.io/baremetal-yfd/gcb-built:a1
+#    docker push gcr.io/baremetal-yfd/gcb-built:a1
